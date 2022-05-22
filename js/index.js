@@ -177,7 +177,6 @@ let touchendX = 0;
 let touchendY = 0;
 
 const limit = Math.tan(45 * 1.5 / 180 * Math.PI);
-//const gestureZone = document.getElementById('modalContent');
 
 window.addEventListener('touchstart', function (event) {
     event.preventDefault()
@@ -222,27 +221,3 @@ function handleGesture(e) {
         }
     }
 }
-
-//Instruction
-function check() {
-    if (window.innerHeight > window.innerWidth) {
-        alert("Please use Landscape! Mode");
-    }
-    else {
-
-        init()
-
-
-        init()
-    }
-}
-
-if (window.DeviceOrientationEvent) {
-    window.addEventListener('orientationchange', function () { check(); }, false);
-}
-
-window.onresize = function (event) {
-    check();
-}
-
-requestAnimationFrame(startGame);
