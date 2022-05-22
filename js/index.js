@@ -145,32 +145,104 @@ window.requestAnimationFrame(main);
 window.addEventListener('keydown', e => {
     inputDir = { x: 0, y: 1 } // Start the game
     moveSound.play();
-    switch (e.key) {
-        case "ArrowUp":
-            console.log("ArrowUp");
-            inputDir.x = 0;
-            inputDir.y = -1;
-            break;
+    if (e.key === "ArrowUp") {
+        console.log("ArrowUp");
+        inputDir.x = 0;
+        inputDir.y = -1;
 
-        case "ArrowDown":
-            console.log("ArrowDown");
-            inputDir.x = 0;
-            inputDir.y = 1;
-            break;
+    } else if (e.key === "ArrowDown") {
+        console.log("ArrowDown");
+        inputDir.x = 0;
+        inputDir.y = 1;
+    } else if (e.key === "ArrowLeft") {
+        console.log("ArrowLeft");
+        inputDir.x = -1;
+        inputDir.y = 0;
+    } else if (e.key === "ArrowRight") {
+        console.log("ArrowRight");
+        inputDir.x = 1;
+        inputDir.y = 0;
 
-        case "ArrowLeft":
-            console.log("ArrowLeft");
-            inputDir.x = -1;
-            inputDir.y = 0;
-            break;
-
-        case "ArrowRight":
-            console.log("ArrowRight");
-            inputDir.x = 1;
-            inputDir.y = 0;
-            break;
-        default:
-            break;
     }
-
 });
+
+
+
+// Touch Test
+let pageWidth = window.innerWidth || document.body.clientWidth;
+let treshold = Math.max(1, Math.floor(0.01 * (pageWidth)));
+let touchstartX = 0;
+let touchstartY = 0;
+let touchendX = 0;
+let touchendY = 0;
+
+const limit = Math.tan(45 * 1.5 / 180 * Math.PI);
+//const gestureZone = document.getElementById('modalContent');
+
+window.addEventListener('touchstart', function (event) {
+    event.preventDefault()
+    touchstartX = event.changedTouches[0].screenX;
+    touchstartY = event.changedTouches[0].screenY;
+}, false);
+
+window.addEventListener('touchend', function (event) {
+    event.preventDefault()
+    touchendX = event.changedTouches[0].screenX;
+    touchendY = event.changedTouches[0].screenY;
+    handleGesture(event);
+}, false);
+
+function handleGesture(e) {
+    let x = touchendX - touchstartX;
+    let y = touchendY - touchstartY;
+    let xy = Math.abs(x / y);
+    let yx = Math.abs(y / x);
+    if (Math.abs(x) > treshold || Math.abs(y) > treshold) {
+
+        if (yx <= limit) {
+            if (x < 0) {
+                console.log("left");
+                inputDir.x = -1;
+                inputDir.y = 0;
+            } else {
+                console.log("right")
+                inputDir.x = 1;
+                inputDir.y = 0;
+            }
+        } else {
+            if (y < 0) {
+                console.log("bottom")
+                inputDir.y = -1;
+                inputDir.x = 0;
+            } else {
+                console.log("top")
+                inputDir.y = 1;
+                inputDir.x = 0;
+            }
+        }
+    }
+}
+
+//Instruction
+function check() {
+    if (window.innerHeight > window.innerWidth) {
+        alert("Please use Landscape! Mode");
+    }
+    else {
+
+        init()
+
+
+        init()
+    }
+}
+
+if (window.DeviceOrientationEvent) {
+    window.addEventListener('orientationchange', function () { check(); }, false);
+}
+
+window.onresize = function (event) {
+    check();
+}
+
+requestAnimationFrame(startGame);
